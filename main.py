@@ -13,7 +13,6 @@ def main():
             if info_character:
                 character_name = info_character["name"].title()
                 character_img_path = info_character["portrait_path"]
-                info_character
                 
                 col1, col2 = st.columns([1, 1.5], gap="small")
                 with col1:
