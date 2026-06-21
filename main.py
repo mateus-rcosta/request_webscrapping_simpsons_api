@@ -28,15 +28,23 @@ def main():
     st.divider()
 
     st.subheader("Popular Characters")
+    search_query_name= st.text_input("Enter a name: ")
+    popular_characters = ss.get_popular_characters(search_query_name)
 
-    popular_characters = ss.get_popular_characters()
+    if popular_characters:
+        for character in popular_characters:
+            col1, col2 = st.columns([1, 2])
 
-    for character in popular_characters:
-        with st.container():
-            st.markdown(f"### {character['name']}")
-            st.write(f"Age: {character['age']}")
-            st.write(f"Status: {character['status']}")
-            st.divider()
+            with col1:
+                if character["image"]:
+                    st.image(character["image"], use_container_width=True)
+
+            with col2:
+                st.subheader(character["name"])
+                st.write(f"Age: {character['age']}")
+                st.write(f"Status: {character['status']}")
+    else:
+        st.info("No popular characters matched that name.")
 
 
 

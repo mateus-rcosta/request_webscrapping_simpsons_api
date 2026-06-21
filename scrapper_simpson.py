@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup as bsp
 import request_simpsons
 
-def get_popular_characters():
+def get_popular_characters(query_name):
     html = request_simpsons.get_simpsons_html()
 
     if not html:
@@ -12,10 +12,20 @@ def get_popular_characters():
     characters = []
 
     character_cards = soup.select('a[data-umami-event="Popular Characters character"]')
+    query = (query_name or "").strip().lower()
 
     for card in character_cards:
         name = card.get("data-umami-event-name")
 
+        if not name:
+            continue
+
+        if query and query not in name.strip().lower():
+            continue
+        
+        img_tag = card.find("img")
+        image = img_tag.get("src") if img_tag else None
+        
         age = None
         status = None
 
@@ -33,7 +43,8 @@ def get_popular_characters():
         characters.append({
             "name": name,
             "age": age,
-            "status": status
+            "status": status,
+            "image": image
         })
 
     return characters
